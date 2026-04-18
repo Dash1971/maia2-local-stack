@@ -1,6 +1,6 @@
 # Maia 2 Local Chess — Linux Setup Guide
 
-Complete walkthrough for setting up Maia 2 on Pop!_OS 24.04 (or any Ubuntu 24.04 derivative): human-like AI opponent, opening books built from real Lichess games, HumanTime thinking delays, and multi-engine analysis with Stockfish.
+Complete walkthrough for setting up Maia 2 on Pop!_OS 24.04 (or another Ubuntu 24.04 derivative), with opening books built from Lichess games and optional side-by-side analysis with Stockfish.
 
 **Tested on:** Pop!_OS 24.04 LTS (COSMIC desktop). Should work on any Ubuntu 24.04 base. Requires ~8 GB disk space (includes 5 GB temporary download during book build).
 
@@ -8,7 +8,7 @@ Complete walkthrough for setting up Maia 2 on Pop!_OS 24.04 (or any Ubuntu 24.04
 
 ## 1. Install Maia 2 + En Croissant
 
-One command does it all:
+Run:
 
 ```bash
 git clone https://github.com/Dash1971/maia2-local-stack.git
@@ -26,7 +26,7 @@ This takes about 10 minutes and installs:
 - The UCI wrapper at `~/chess/maia2-engine/maia2_uci.py`
 - A launcher at `~/chess/maia2-engine/maia2-engine.sh`
 
-**One gotcha to know about:** `pip install maia2` doesn't declare most of its runtime dependencies. The setup script pre-installs them (`pyyaml gdown chess einops pyzstd requests pandas numpy tqdm`) so you don't have to debug `ImportError`s.
+`pip install maia2` does not declare all of its runtime dependencies. The setup script pre-installs them (`pyyaml gdown chess einops pyzstd requests pandas numpy tqdm`).
 
 ### Smoke test
 
@@ -111,7 +111,7 @@ Launch En Croissant. Set up **three engines** in the Engines tab.
 - **Depth:** `1` (critical — Maia does no search, it just asks the network once)
 - **ELO:** your target strength (see calibration table below)
 - **BookFile:** `/home/<your-username>/chess/books/lichess_1600_all.bin` (or whichever book matches your target)
-- **HumanTime:** `true` (for realistic thinking delays)
+- **HumanTime:** `true` (optional thinking delays)
 
 ### Engine 2: Maia 2 Analysis (for the analysis panel)
 
@@ -120,7 +120,7 @@ Same path as Engine 1, but:
 - **HumanTime:** `false`
 - **BookFile:** leave blank
 
-Using two separate engine entries means you can play against the full experience (with book + realistic delays) while also using Maia in the analysis panel without book interference.
+Using two separate engine entries keeps play settings and analysis settings separate.
 
 ### Engine 3: Stockfish (for objective evaluation)
 
@@ -134,7 +134,7 @@ En Croissant shows the ELO setting in two places. The **General settings** one (
 
 ## 4. Calibration
 
-Maia plays stronger than its nominal rating because it never tilts, never blunders from time pressure, and always picks its most-likely move. Real players have variance — they sometimes pick the 3rd or 4th most likely move. Start here:
+Use this as a starting point rather than a measured equivalence table:
 
 | Your Rating | Set Maia ELO To | Adjust Range |
 |:-:|:-:|:-:|
@@ -144,13 +144,13 @@ Maia plays stronger than its nominal rating because it never tilts, never blunde
 | 1800 | 1400 | 1200–1600 |
 | 2000 | 1700 | 1500–1900 |
 
-For higher-rated play (2200+), the gap narrows. Maia 2200 plays roughly like a real 2200.
+For higher-rated play (2200+), the gap may narrow.
 
 ---
 
 ## 5. Multi-engine analysis
 
-This is the killer feature. In En Croissant's **Analysis** tab:
+In En Croissant's **Analysis** tab:
 
 1. Open a game (or start a new position)
 2. Click the **+** button to add a second engine line
@@ -195,7 +195,7 @@ EOF
 chmod +x ~/chess/maia2-engine/maia2-engine-blitz.sh
 ```
 
-Add it as a separate engine in En Croissant pointing at `maia2-engine-blitz.sh`. Blitz Maia plays faster, more aggressive, more tactical — mirroring how real humans play differently under time pressure.
+Add it as a separate engine in En Croissant pointing at `maia2-engine-blitz.sh`. Blitz Maia can produce a different style from the rapid weights and is useful as a separate practice engine.
 
 ---
 
@@ -257,4 +257,4 @@ Unlikely with 8+ GB RAM, but if it does, try with a smaller data size (option 1:
     └── lichess_1800_all.bin
 ```
 
-That's it. Three files under the engine folder, a few `.bin` books, and you're playing human-like chess locally.
+At that point, the local setup is complete.

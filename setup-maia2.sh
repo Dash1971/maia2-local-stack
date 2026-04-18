@@ -3,7 +3,7 @@
 # ║  setup-maia2.sh — One-shot installer (Linux + macOS)                 ║
 # ║                                                                    ║
 # ║  Installs:                                                         ║
-# ║    • Maia 2 (human-like neural network chess engine)               ║
+# ║    • Maia 2 (rating-targeted neural-network chess engine)          ║
 # ║    • UCI wrapper with opening book + HumanTime support             ║
 # ║    • Stockfish (for post-game analysis)                            ║
 # ║    • En Croissant (chess GUI) — installed on Linux,                ║
@@ -510,7 +510,7 @@ echo -e "    Path:      ${CYAN}$LAUNCHER${RESET}"
 echo -e "    Depth:     ${BOLD}1${RESET}  (critical — Maia 2 does no search)"
 echo -e "    ELO:       your target strength (600–2600)"
 echo -e "    BookFile:  path to your .bin book (optional but recommended)"
-echo -e "    HumanTime: ${BOLD}true${RESET}  (for human-like thinking delays)"
+echo -e "    HumanTime: ${BOLD}true${RESET}  (optional thinking delays)"
 echo ""
 echo -e "  ${YELLOW}STOCKFISH (for analysis):${RESET}"
 echo -e "    Path:      ${CYAN}$SF_PATH${RESET}"

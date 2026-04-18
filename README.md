@@ -1,23 +1,21 @@
 # maia2-local-stack
 
-**Run [Maia 2](https://www.maiachess.com/) locally as a human-like chess opponent, with opening books built from real Lichess games at your rating.**
+Run [Maia 2](https://www.maiachess.com/) locally as a UCI chess engine, with opening books built from Lichess games filtered by rating and support for side-by-side analysis with Stockfish.
 
-Stockfish plays perfectly. Humans don't. If you want to *improve*, you need an opponent that makes the kind of mistakes a player at your level actually makes — and capitalizes on yours the way a human would. That's what this project gives you.
+Maia 2 is a neural network from the University of Toronto's CSSLab that predicts likely human moves at a given rating. This repository packages Maia 2 for local use with En Croissant or any UCI-compatible GUI, adds optional opening-book support, and provides Linux and Apple Silicon macOS setup paths.
 
-Maia 2 is a neural network from the University of Toronto's CSSLab that predicts what a human at a specific rating would play. This repo wraps it as a UCI engine with opening books generated from millions of real Lichess games at your rating range, realistic thinking delays, and full multi-engine analysis support.
-
-## What it looks like
+## Screenshot
 
 ![En Croissant analysis with Maia and Stockfish side by side](docs/images/en-croissant-analysis.png)
 
 ---
 
-## What you get
+## Features
 
-- **Human-like play** at any rating from 600 to 2600
+- **Rating-targeted play** from 600 to 2600
 - **Opening books** weighted by how often real players at your level actually choose each move
-- **HumanTime** — realistic thinking delays (0.5–15 seconds, scaled by position complexity)
-- **Multi-engine analysis** — run Maia + Stockfish side by side to see "what a human would play" vs "what's objectively best"
+- **HumanTime** — optional thinking delays (0.5–15 seconds, scaled by position complexity)
+- **Multi-engine analysis** — run Maia and Stockfish side by side
 - **Separate blitz and rapid engines** — Maia 2 has distinct weight files for each time control
 - Works with **[En Croissant](https://encroissant.org/)** or any UCI-compatible chess GUI
 - Runs on **Linux** (Pop!_OS / Ubuntu 24.04) and **macOS** (Apple Silicon with MPS acceleration)
@@ -35,7 +33,7 @@ chmod +x *.sh
 ./build-books.sh      # interactive book builder
 ```
 
-The book builder prompts you for target rating(s), time control, download size, and which Lichess monthly archive to use. Default is `1400,1600,1800` across all time controls from 5 GB of January 2024 data — sufficient for strong books in about 45 minutes.
+The book builder prompts for target rating(s), time control, download size, and which Lichess monthly archive to use. Default is `1400,1600,1800` across all time controls from 5 GB of January 2024 data.
 
 Then point En Croissant at `~/chess/maia2-engine/maia2-engine.sh` with BookFile set to your generated `.bin`. See [GUIDE.md](GUIDE.md) for the complete walkthrough.
 
@@ -72,13 +70,11 @@ See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough, including Stockfi
 
 ---
 
-## How the book builder works
+## Book-builder pipeline
 
 ```
 Lichess .pgn.zst → curl (5 GB slice) → zstdcat → Python (in-memory) → .bin books
 ```
-
-One pipeline. No database. No intermediate files. No corruption risk.
 
 The builder downloads a portion of a Lichess monthly archive (you choose 2/5/10 GB), streams the decompressed PGN through Python, and keeps move-frequency stats in memory per rating bucket. When the stream ends, it writes one Polyglot `.bin` file per requested rating.
 
@@ -92,9 +88,9 @@ The builder downloads a portion of a Lichess monthly archive (you choose 2/5/10 
 
 ---
 
-## Difficulty calibration
+## Suggested calibration
 
-Maia plays stronger than its nominal rating because it never tilts, never blunders from time pressure, and always picks its most-likely move (real players sometimes pick the 3rd or 4th). Start here:
+These settings are starting points, not measured equivalences. In practice, many users will want to set Maia below their own rating.
 
 | Your Rating | Set Maia ELO To |
 |:-:|:-:|
@@ -104,11 +100,11 @@ Maia plays stronger than its nominal rating because it never tilts, never blunde
 | 1800 | 1400 |
 | 2000 | 1700 |
 
-Adjust ±200 from there to find your sparring sweet spot. For higher ratings (2200+) the gap narrows — Maia 2200 plays roughly like a real 2200.
+Adjust by roughly ±200 based on results. For higher ratings (2200+), the gap may narrow.
 
 ---
 
-## Multi-engine analysis
+## Analysis workflow
 
 Set up two Maia engines in En Croissant:
 
@@ -120,7 +116,13 @@ Plus Stockfish for objective evaluation. In the Analysis panel, add both Stockfi
 - **Stockfish** says what's objectively best
 - **Maia** says what a human at your target rating would actually play
 
-When they agree, the move is both good and natural to find. When they disagree, that's exactly where your improvement opportunities are.
+Use this to compare likely human choices against engine-best moves.
+
+## Limitations
+
+- The repository copy of `maia2_uci.py` is a source file; `setup-maia2.sh` generates the installed wrapper used under `~/chess/maia2-engine/`.
+- The calibration table is heuristic.
+- The setup scripts have been syntax-checked, but not every platform path is continuously tested in this repository.
 
 ---
 

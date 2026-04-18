@@ -1,6 +1,6 @@
 # Maia 2 Local Chess — macOS Setup Guide (Apple Silicon)
 
-Set up Maia 2 on your Apple Silicon Mac: human-like AI opponent, opening books built from real Lichess games at your rating, HumanTime thinking delays, and multi-engine analysis with Stockfish.
+Set up Maia 2 on an Apple Silicon Mac, with opening books built from Lichess games and optional side-by-side analysis with Stockfish.
 
 **Tested on:** M4 MacBook Air, macOS Sequoia. Works on any Apple Silicon Mac (M1/M2/M3/M4). PyTorch uses **MPS** (Apple Silicon GPU) for faster neural network inference.
 
@@ -27,7 +27,7 @@ Verify: `brew --version`
 
 ---
 
-## 2. Install Maia 2 (one command)
+## 2. Install Maia 2
 
 ```bash
 cd ~
@@ -129,7 +129,7 @@ Launch En Croissant. Set up **three engines** in the Engines tab.
 - **Depth:** `1` (critical — Maia does no search)
 - **ELO:** your target strength (your rating minus 200-400, see calibration below)
 - **BookFile:** `/Users/YOUR_USERNAME/chess/books/lichess_1600_all.bin` (use full absolute path, not `~`)
-- **HumanTime:** `true` (for realistic thinking delays)
+- **HumanTime:** `true` (optional thinking delays)
 
 ### Engine 2: Maia 2 Analysis (for the analysis panel)
 
@@ -150,7 +150,7 @@ En Croissant shows the ELO setting in two places. The **General settings** one (
 
 ## 6. Calibration
 
-Maia plays stronger than its nominal rating because it never tilts, never blunders from time pressure, and always picks its most-likely move. Start here:
+Use this as a starting point rather than a measured equivalence table:
 
 | Your Rating | Set ELO To | Adjust Range |
 |-------------|-----------|--------------|
@@ -160,7 +160,7 @@ Maia plays stronger than its nominal rating because it never tilts, never blunde
 | 1800 | 1400 | 1200–1600 |
 | 2000 | 1700 | 1500–1900 |
 
-For higher ratings (2200+) the gap narrows — Maia 2200 plays roughly like a real 2200.
+For higher ratings (2200+), the gap may narrow.
 
 ---
 
@@ -282,4 +282,4 @@ Install Homebrew first (see step 1), then re-run the setup script.
 └── stockfish                 # local copy for En Croissant
 ```
 
-That's it. One setup command, one book-builder command, one En Croissant download — and you've got human-like chess running locally on your Mac with MPS acceleration.
+At that point, the local setup is complete.
