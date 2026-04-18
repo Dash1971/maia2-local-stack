@@ -1,10 +1,14 @@
-# maia2-local
+# maia2-local-stack
 
 **Run [Maia 2](https://www.maiachess.com/) locally as a human-like chess opponent, with opening books built from real Lichess games at your rating.**
 
 Stockfish plays perfectly. Humans don't. If you want to *improve*, you need an opponent that makes the kind of mistakes a player at your level actually makes — and capitalizes on yours the way a human would. That's what this project gives you.
 
 Maia 2 is a neural network from the University of Toronto's CSSLab that predicts what a human at a specific rating would play. This repo wraps it as a UCI engine with opening books generated from millions of real Lichess games at your rating range, realistic thinking delays, and full multi-engine analysis support.
+
+## What it looks like
+
+![En Croissant analysis with Maia and Stockfish side by side](docs/images/en-croissant-analysis.png)
 
 ---
 
@@ -23,8 +27,8 @@ Maia 2 is a neural network from the University of Toronto's CSSLab that predicts
 ## Quick start — Linux
 
 ```bash
-git clone https://github.com/Dash1971/maia2-local.git
-cd maia2-local
+git clone https://github.com/Dash1971/maia2-local-stack.git
+cd maia2-local-stack
 chmod +x *.sh
 
 ./setup-maia2.sh      # installs Maia 2, wrapper, Stockfish, En Croissant
@@ -42,8 +46,8 @@ Then point En Croissant at `~/chess/maia2-engine/maia2-engine.sh` with BookFile 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Then:
-git clone https://github.com/Dash1971/maia2-local.git
-cd maia2-local
+git clone https://github.com/Dash1971/maia2-local-stack.git
+cd maia2-local-stack
 chmod +x *.sh
 
 ./setup-maia2.sh      # auto-detects macOS, uses brew + MPS
