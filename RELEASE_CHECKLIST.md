@@ -27,13 +27,13 @@ python3 -m py_compile maia2_uci.py
 ### Linux
 - [ ] `GUIDE.md` matches current `setup-maia2.sh` behavior
 - [ ] Linux package names and paths still look valid (`apt`, `/usr/games/stockfish`)
-- [ ] En Croissant `.deb` version/url is current
+- [ ] En Croissant pin in `setup-maia2.sh` is current (`EC_VERSION`, `EC_DEB_URL`)
 
 ### macOS
 - [ ] `GUIDE-macOS.md` matches current `setup-maia2.sh` behavior
 - [ ] Homebrew package names still resolve
 - [ ] macOS smoke test still works without GNU-only assumptions
-- [ ] En Croissant Apple Silicon `.dmg` url is current
+- [ ] En Croissant Apple Silicon pin in `setup-maia2.sh` is current (`EC_DMG_URL`)
 
 ## 4. Wrapper consistency
 

@@ -57,9 +57,11 @@ This takes about 10 minutes and handles everything:
 
 ## 3. Install En Croissant
 
-Download the **aarch64 (Apple Silicon) .dmg** from:
+Download the **aarch64 (Apple Silicon) .dmg** from the En Croissant releases page:
 
-https://github.com/franciscoBSalgueiro/en-croissant/releases/download/v0.15.0/en-croissant_0.15.0_aarch64.dmg
+https://github.com/franciscoBSalgueiro/en-croissant/releases
+
+`setup-maia2.sh` prints the currently pinned tested download URL at runtime.
 
 Open the .dmg and drag En Croissant to Applications.
 

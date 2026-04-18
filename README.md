@@ -52,7 +52,7 @@ chmod +x *.sh
 ./build-books.sh      # same script works on both platforms
 ```
 
-Plus one manual step: download the [En Croissant .dmg for Apple Silicon](https://github.com/franciscoBSalgueiro/en-croissant/releases) and drag it to Applications (macOS doesn't allow scripted .dmg installs).
+Plus one manual step: download the Apple Silicon `.dmg` from the [En Croissant releases page](https://github.com/franciscoBSalgueiro/en-croissant/releases) and drag it to Applications. `setup-maia2.sh` prints the currently pinned tested download URL at runtime.
 
 See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough, including Stockfish workaround for Apple Silicon.
 

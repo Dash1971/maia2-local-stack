@@ -42,7 +42,10 @@ BOOKS_DIR="$CHESS_DIR/books"
 VENV_DIR="$ENGINE_DIR/venv"
 UCI_SCRIPT="$ENGINE_DIR/maia2_uci.py"
 LAUNCHER="$ENGINE_DIR/maia2-engine.sh"
-EC_VERSION="0.15.0"
+EC_VERSION="${EC_VERSION:-0.15.0}"
+EC_BASE="https://github.com/franciscoBSalgueiro/en-croissant/releases/download/v${EC_VERSION}"
+EC_DEB_URL="${EC_DEB_URL:-$EC_BASE/en-croissant_${EC_VERSION}_amd64.deb}"
+EC_DMG_URL="${EC_DMG_URL:-$EC_BASE/en-croissant_${EC_VERSION}_aarch64.dmg}"
 
 step_num=0
 total_steps=6
@@ -439,8 +442,7 @@ if [[ "$PLATFORM" == "linux" ]]; then
     else
         DEB="/tmp/en-croissant_${EC_VERSION}_amd64.deb"
         info "Downloading En Croissant v${EC_VERSION}..."
-        wget -q --show-progress -O "$DEB" \
-            "https://github.com/franciscoBSalgueiro/en-croissant/releases/download/v${EC_VERSION}/en-croissant_${EC_VERSION}_amd64.deb"
+        wget -q --show-progress -O "$DEB" "$EC_DEB_URL"
         info "Installing..."
         sudo apt install -y "$DEB" 2>&1 | tail -3
         rm -f "$DEB"
@@ -456,7 +458,7 @@ elif [[ "$PLATFORM" == "macos" ]]; then
         echo -e "  ${BOLD}Please do this manually:${RESET}"
         echo ""
         echo "  1. Download the Apple Silicon .dmg from:"
-        echo -e "     ${CYAN}https://github.com/franciscoBSalgueiro/en-croissant/releases/download/v${EC_VERSION}/en-croissant_${EC_VERSION}_aarch64.dmg${RESET}"
+        echo -e "     ${CYAN}$EC_DMG_URL${RESET}"
         echo ""
         echo "  2. Open the .dmg and drag En Croissant to Applications"
         echo ""
