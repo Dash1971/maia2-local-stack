@@ -27,22 +27,32 @@ git clone https://github.com/Dash1971/maia2-local.git
 cd maia2-local
 chmod +x *.sh
 
-# 1. Install Maia 2, UCI wrapper, Stockfish, En Croissant (~10 min)
-./setup-maia2.sh
-
-# 2. Build opening books (~30-60 min total, interactive)
-./build-books.sh
+./setup-maia2.sh      # installs Maia 2, wrapper, Stockfish, En Croissant
+./build-books.sh      # interactive book builder
 ```
 
-The book builder prompts you for target rating(s), time control, and download size. Default is `1400,1600,1800` across all time controls from 5 GB of data — sufficient for strong books in about 45 minutes.
+The book builder prompts you for target rating(s), time control, download size, and which Lichess monthly archive to use. Default is `1400,1600,1800` across all time controls from 5 GB of January 2024 data — sufficient for strong books in about 45 minutes.
 
 Then point En Croissant at `~/chess/maia2-engine/maia2-engine.sh` with BookFile set to your generated `.bin`. See [GUIDE.md](GUIDE.md) for the complete walkthrough.
 
 ## Quick start — macOS (Apple Silicon)
 
-I didn't build any book file on Mac. (just copy a `.bin` book file from your Linux machine (or grab one from this repo's Releases).
+```bash
+# Install Homebrew first if you don't have it:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough. Uses Apple Silicon's GPU via MPS for faster inference.
+# Then:
+git clone https://github.com/Dash1971/maia2-local.git
+cd maia2-local
+chmod +x *.sh
+
+./setup-maia2.sh      # auto-detects macOS, uses brew + MPS
+./build-books.sh      # same script works on both platforms
+```
+
+Plus one manual step: download the [En Croissant .dmg for Apple Silicon](https://github.com/franciscoBSalgueiro/en-croissant/releases) and drag it to Applications (macOS doesn't allow scripted .dmg installs).
+
+See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough, including Stockfish workaround for Apple Silicon.
 
 ---
 
@@ -50,9 +60,9 @@ See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough. Uses Apple Silico
 
 | File | Purpose |
 |---|---|
-| `setup-maia2.sh` | One-shot Linux installer for Maia 2, UCI wrapper, Stockfish, En Croissant |
+| `setup-maia2.sh` | Cross-platform installer (Linux via apt, macOS via brew) — Maia 2, UCI wrapper, Stockfish, venv |
 | `maia2_uci.py` | UCI engine wrapper (book support, HumanTime, analysis mode, flat eval) |
-| `build-books.sh` | Interactive book builder — downloads Lichess data, streams it through Python, writes `.bin` books |
+| `build-books.sh` | Interactive book builder — downloads Lichess data, streams through Python, writes `.bin` books |
 | [`GUIDE.md`](GUIDE.md) | Full Linux setup guide |
 | [`GUIDE-macOS.md`](GUIDE-macOS.md) | Full macOS setup guide (Apple Silicon / MPS) |
 
@@ -64,12 +74,14 @@ See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough. Uses Apple Silico
 Lichess .pgn.zst → curl (5 GB slice) → zstdcat → Python (in-memory) → .bin books
 ```
 
+One pipeline. No database. No intermediate files. No corruption risk.
+
 The builder downloads a portion of a Lichess monthly archive (you choose 2/5/10 GB), streams the decompressed PGN through Python, and keeps move-frequency stats in memory per rating bucket. When the stream ends, it writes one Polyglot `.bin` file per requested rating.
 
 **Key details:**
 
 - **Multiple ratings in one pass.** Ask for `1400,1600,1800` and each game gets counted in every bucket its average rating falls into (±100 by default). The download only happens once.
-- **Choose your data source.** The builder prompts for a Lichess monthly archive (e.g. `2024-01`, `2025-06`). Default is `2024-01`. Browse available months at [database.lichess.org](https://database.lichess.org).
+- **Choose your data source.** The builder prompts for a Lichess monthly archive (e.g. `2024-01`, `2025-06`). Recent months have more games. Default is `2024-01`. Browse available months at [database.lichess.org](https://database.lichess.org).
 - **Proportional weight scaling.** The most-popular move in any position gets the Polyglot max weight of 65,535, and everything else is scaled proportionally — so popular first moves don't all cap at the same value.
 - **PyPy auto-detected.** If `pypy3` is installed with the `chess` package, the builder uses it for 3-5x speedup. Otherwise falls back to the CPython venv created by the setup script.
 - **Ctrl-C safe.** If you abort mid-stream, it still writes books with whatever data it has collected.
@@ -120,10 +132,3 @@ When they agree, the move is both good and natural to find. When they disagree, 
 ## License
 
 MIT for scripts and wrapper code in this repo. Maia 2 model weights have their own license — see the [Maia chess repo](https://github.com/CSSLab/maia-chess). Lichess data is CC0.
-| `lichess-import-parallel.sh` | Parallel Lichess game importer with awk pre-filter |
-| `build-stats-fast.sh` | Opening stats builder (staging table + PyPy) |
-| `build-book.sh` | Polyglot `.bin` generator with proportional weight scaling |
-| `query.sh` | Interactive queries against your local Lichess database |
-| `sanity-check.sh` | Verifies books and database against known expectations |
-| [`GUIDE.md`](GUIDE.md) | Full Linux setup guide |
-| [`GUIDE-macOS.md`](GUIDE-macOS.md) | Full macOS setup guide (Apple Silicon / MPS) |
