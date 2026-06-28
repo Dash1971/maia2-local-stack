@@ -104,6 +104,10 @@ Uses the defaults (`1400,1600,1800` / all speeds / 5 GB) without prompting.
 
 Launch En Croissant. Set up **three engines** in the Engines tab.
 
+The two Maia entries can point to the same `maia2-engine.sh` launcher. En
+Croissant stores each entry's UCI options independently, so use them as separate
+profiles rather than separate installed binaries.
+
 ### Engine 1: Maia 2 (for playing)
 
 - **Engines → Add New → Local → Binary file**
@@ -149,6 +153,11 @@ For higher-rated play (2200+), the gap may narrow.
 ---
 
 ## 5. Multi-engine analysis
+
+For same-strength play and analysis, keep the ELO identical between the two
+Maia entries. The play profile can use `BookFile` plus `HumanTime=true`; the
+analysis profile should leave the book blank and set `HumanTime=false` so
+recommended moves appear without delay.
 
 In En Croissant's **Analysis** tab:
 

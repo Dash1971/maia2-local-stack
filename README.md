@@ -111,6 +111,12 @@ Set up two Maia engines in En Croissant:
 1. **Maia 2 (play)** — `HumanTime=true`, BookFile set, Depth=1
 2. **Maia 2 Analysis** — `HumanTime=false`, no BookFile, Depth=1
 
+Both entries can point to the same `~/chess/maia2-engine/maia2-engine.sh`
+launcher. En Croissant stores their UCI options separately, so treat each entry
+as a profile: one for play with your target ELO, matching opening book, and
+human-like delay; and one for analysis at the same ELO with `HumanTime` unticked
+so the recommended move appears without delay.
+
 Plus Stockfish for objective evaluation. In the Analysis panel, add both Stockfish and Maia 2 Analysis. As you step through a game:
 
 - **Stockfish** says what's objectively best
