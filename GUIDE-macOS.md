@@ -78,28 +78,17 @@ cd ~
 git clone https://github.com/Dash1971/chess-opening-book-builder.git
 cd chess-opening-book-builder
 chmod +x build-books.sh
-./build-books.sh
+./build-books.sh --preset maia3-1600-rapid
 ```
 
-It will ask you four questions:
+The preset builds a 1600 Rapid imitation book using a ±50 rating band, at
+least 25 games per emitted position, a 40-ply cap, and a maximum 200-point
+rating difference between players. Run `./build-books.sh --help` for other
+ratings, speeds, months, and thresholds.
 
-**1. Target rating(s)** — comma-separated, from 600 to 2600 in 100-elo steps. Default: `1400,1600,1800`. Each book uses games whose average player rating is within ±100 of the target.
-
-**2. Time control:**
-- Rapid only
-- Blitz only
-- Classical only
-- Blitz + Rapid
-- All (default)
-
-**3. Download size:**
-- 2 GB (~5M games, ~25 min)
-- 5 GB (~15M games, ~45 min) ← default
-- 10 GB (~30M games, ~90 min)
-
-**4. Lichess monthly archive** — format `YYYY-MM`. Default: `2024-01`. Browse all available months at [database.lichess.org](https://database.lichess.org).
-
-The script downloads the chosen portion of the archive, streams it through Python in memory, writes `.bin` books to `~/chess/books/`, and deletes the temporary download.
+The builder writes `lichess_1600_rapid_2024-01.bin` plus a matching JSON
+provenance sidecar under `~/chess/books/`. It retains the downloaded archive
+prefix for reuse unless you pass `--clean`.
 
 ### Optional: speed it up with PyPy
 
@@ -111,16 +100,6 @@ pypy3 -m pip install chess
 ```
 
 The standalone builder auto-detects PyPy and uses it if available.
-
-### Non-interactive mode
-
-For scripting or re-runs:
-
-```bash
-./build-books.sh --defaults
-```
-
-Uses defaults (`1400,1600,1800` / all speeds / 5 GB / `2024-01`) without prompting.
 
 ---
 
@@ -138,7 +117,7 @@ profiles rather than separate installed binaries.
 - macOS Finder hides your home folder by default. When the file picker opens, press **Cmd+Shift+G** and type: `~/chess/maia2-engine/maia2-engine.sh`
 - **Depth:** `1` (critical — Maia does no search)
 - **ELO:** your target strength (your rating minus 200-400, see calibration below)
-- **BookFile:** `/Users/YOUR_USERNAME/chess/books/lichess_1600_all.bin` (use full absolute path, not `~`)
+- **BookFile:** `/Users/YOUR_USERNAME/chess/books/lichess_1600_rapid_2024-01.bin` (use the generated full path, not `~`)
 - **HumanTime:** `true` (optional thinking delays)
 
 ### Engine 2: Maia 2 Analysis (for the analysis panel)
@@ -291,9 +270,8 @@ Install Homebrew first (see step 1), then re-run the setup script.
 │   ├── maia2_uci.py         # UCI wrapper (MPS-accelerated)
 │   └── venv/                # Python environment
 ├── books/
-│   ├── lichess_1400_all.bin  # your opening books
-│   ├── lichess_1600_all.bin
-│   └── lichess_1800_all.bin
+│   ├── lichess_1600_rapid_2024-01.bin   # generated opening book
+│   └── lichess_1600_rapid_2024-01.json  # build provenance
 └── stockfish                 # local copy for En Croissant
 ```
 

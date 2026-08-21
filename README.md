@@ -85,7 +85,7 @@ The builder downloads a portion of a Lichess monthly archive (you choose 2/5/10 
 
 **Key details:**
 
-- **Multiple ratings in one pass.** Ask for `1400,1600,1800` and each game gets counted in every bucket its average rating falls into (±100 by default). The download only happens once.
+- **Configurable rating bands.** The recommended 1600 Rapid preset uses ±50; custom runs can request multiple ratings and another band width in one pass.
 - **Choose your data source.** The builder prompts for a Lichess monthly archive (e.g. `2024-01`, `2025-06`). Recent months have more games. Default is `2024-01`. Browse available months at [database.lichess.org](https://database.lichess.org).
 - **Proportional weight scaling.** The most-popular move in any position gets the Polyglot max weight of 65,535, and everything else is scaled proportionally — so popular first moves don't all cap at the same value.
 - **PyPy auto-detected.** If `pypy3` is installed with the `chess` package, the builder uses it for a 3-5x speedup. Otherwise it creates its own CPython environment.

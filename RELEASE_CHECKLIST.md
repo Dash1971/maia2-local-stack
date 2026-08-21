@@ -42,7 +42,7 @@ python3 -m py_compile maia2_uci.py
 
 ## 5. Documentation accuracy
 
-- [ ] Rating-bucket description matches actual builder logic (average rating ±100)
+- [ ] Rating-bucket description matches the standalone builder and its current preset
 - [ ] Calibration language stays heuristic, not overstated
 - [ ] README tone is factual and businesslike
 - [ ] Any new flags, paths, or limitations are documented

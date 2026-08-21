@@ -49,37 +49,21 @@ cd ~
 git clone https://github.com/Dash1971/chess-opening-book-builder.git
 cd chess-opening-book-builder
 chmod +x build-books.sh
-./build-books.sh
+./build-books.sh --preset maia3-1600-rapid
 ```
 
-It will ask you four questions:
+The preset builds a 1600 Rapid imitation book using a ±50 rating band, at
+least 25 games per emitted position, a 40-ply cap, and a maximum 200-point
+rating difference between players. Run `./build-books.sh --help` to select
+other ratings, speeds, months, and thresholds.
 
-**1. Target rating(s)** — any comma-separated list from 600 to 2600 in 100-elo steps. Default: `1400,1600,1800`. Each book includes games whose average player rating is within ±100 of that target.
+Books and matching provenance sidecars are written to `~/chess/books/`:
 
-**2. Time control:**
-- Rapid only
-- Blitz only
-- Classical only
-- Blitz + Rapid
-- All (default)
+- `lichess_1600_rapid_2024-01.bin`
+- `lichess_1600_rapid_2024-01.json`
 
-**3. Download size:**
-- 2 GB (~5M games, ~25 min total)
-- 5 GB (~15M games, ~45 min total) ← default
-- 10 GB (~30M games, ~90 min total)
-
-**4. Lichess monthly archive** — the month of game data to use (format: `YYYY-MM`). Default: `2024-01`. Recent months have more games. Browse all available months at [database.lichess.org](https://database.lichess.org). A month typically becomes available a few days into the following month.
-
-Confirm, and it will:
-1. Download the chosen amount of data from the specified month
-2. Stream it through Python, filtering and aggregating in memory
-3. Write one `.bin` per requested rating to `~/chess/books/`
-4. Delete the temporary download
-
-Output filenames follow the pattern `lichess_<rating>_<speed>.bin`:
-- `lichess_1600_all.bin`
-- `lichess_1600_rapid.bin`
-- `lichess_1600_blitz_rapid.bin`
+The downloaded archive prefix is cached for reuse. Pass `--clean` only when
+you want it removed after a successful build.
 
 ### Faster with PyPy
 
@@ -91,16 +75,6 @@ pypy3 -m pip install chess --break-system-packages
 ```
 
 The standalone builder auto-detects PyPy and uses it if available.
-
-### Non-interactive mode
-
-For scripting or re-runs:
-
-```bash
-./build-books.sh --defaults
-```
-
-Uses the defaults (`1400,1600,1800` / all speeds / 5 GB) without prompting.
 
 ---
 
@@ -118,7 +92,7 @@ profiles rather than separate installed binaries.
 - **Path:** `/home/<your-username>/chess/maia2-engine/maia2-engine.sh`
 - **Depth:** `1` (critical — Maia does no search, it just asks the network once)
 - **ELO:** your target strength (see calibration table below)
-- **BookFile:** `/home/<your-username>/chess/books/lichess_1600_all.bin` (or whichever book matches your target)
+- **BookFile:** `/home/<your-username>/chess/books/lichess_1600_rapid_2024-01.bin` (or your generated book)
 - **HumanTime:** `true` (optional thinking delays)
 
 ### Engine 2: Maia 2 Analysis (for the analysis panel)
@@ -265,9 +239,8 @@ Unlikely with 8+ GB RAM, but if it does, try with a smaller data size (option 1:
 │   ├── maia2_uci.py            # UCI wrapper with book + HumanTime
 │   └── venv/                   # Python environment
 └── books/
-    ├── lichess_1400_all.bin    # your opening books
-    ├── lichess_1600_all.bin
-    └── lichess_1800_all.bin
+    ├── lichess_1600_rapid_2024-01.bin   # generated opening book
+    └── lichess_1600_rapid_2024-01.json  # build provenance
 ```
 
 At that point, the local setup is complete.
