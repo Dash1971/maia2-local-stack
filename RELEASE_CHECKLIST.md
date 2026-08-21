@@ -15,7 +15,6 @@ Run from the repo root:
 
 ```bash
 bash -n setup-maia2.sh
-bash -n build-books.sh
 python3 -m py_compile maia2_uci.py
 ```
 

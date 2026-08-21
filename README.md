@@ -30,10 +30,12 @@ cd maia2-local-stack
 chmod +x *.sh
 
 ./setup-maia2.sh      # installs Maia 2, wrapper, Stockfish, En Croissant
-./build-books.sh      # interactive book builder
 ```
 
-The book builder prompts for target rating(s), time control, download size, and which Lichess monthly archive to use. Default is `1400,1600,1800` across all time controls from 5 GB of January 2024 data.
+Opening books are built separately with
+[Chess Opening Book Builder](https://github.com/Dash1971/chess-opening-book-builder).
+It prompts for target rating(s), time control, download size, and Lichess
+archive month.
 
 Then point En Croissant at `~/chess/maia2-engine/maia2-engine.sh` with BookFile set to your generated `.bin`. See [GUIDE.md](GUIDE.md) for the complete walkthrough.
 
@@ -49,7 +51,6 @@ cd maia2-local-stack
 chmod +x *.sh
 
 ./setup-maia2.sh      # auto-detects macOS, uses brew + MPS
-./build-books.sh      # same script works on both platforms
 ```
 
 Plus one manual step: download the Apple Silicon `.dmg` from the [En Croissant releases page](https://github.com/franciscoBSalgueiro/en-croissant/releases) and drag it to Applications. `setup-maia2.sh` prints the currently pinned tested download URL at runtime.
@@ -64,13 +65,17 @@ See [GUIDE-macOS.md](GUIDE-macOS.md) for the full walkthrough, including Stockfi
 |---|---|
 | `setup-maia2.sh` | Cross-platform installer (Linux via apt, macOS via brew) — Maia 2, UCI wrapper, Stockfish, venv |
 | `maia2_uci.py` | UCI engine wrapper (book support, HumanTime, analysis mode, flat eval) |
-| `build-books.sh` | Interactive book builder — downloads Lichess data, streams through Python, writes `.bin` books |
 | [`GUIDE.md`](GUIDE.md) | Full Linux setup guide |
 | [`GUIDE-macOS.md`](GUIDE-macOS.md) | Full macOS setup guide (Apple Silicon / MPS) |
 
 ---
 
 ## Book-builder pipeline
+
+Opening-book generation is maintained as the standalone
+[Chess Opening Book Builder](https://github.com/Dash1971/chess-opening-book-builder)
+project so it can be used with Maia 2, Maia 3, Stockfish, and other
+Polyglot-compatible engines.
 
 ```
 Lichess .pgn.zst → curl (5 GB slice) → zstdcat → Python (in-memory) → .bin books
@@ -83,7 +88,7 @@ The builder downloads a portion of a Lichess monthly archive (you choose 2/5/10 
 - **Multiple ratings in one pass.** Ask for `1400,1600,1800` and each game gets counted in every bucket its average rating falls into (±100 by default). The download only happens once.
 - **Choose your data source.** The builder prompts for a Lichess monthly archive (e.g. `2024-01`, `2025-06`). Recent months have more games. Default is `2024-01`. Browse available months at [database.lichess.org](https://database.lichess.org).
 - **Proportional weight scaling.** The most-popular move in any position gets the Polyglot max weight of 65,535, and everything else is scaled proportionally — so popular first moves don't all cap at the same value.
-- **PyPy auto-detected.** If `pypy3` is installed with the `chess` package, the builder uses it for 3-5x speedup. Otherwise falls back to the CPython venv created by the setup script.
+- **PyPy auto-detected.** If `pypy3` is installed with the `chess` package, the builder uses it for a 3-5x speedup. Otherwise it creates its own CPython environment.
 - **Ctrl-C safe.** If you abort mid-stream, it still writes books with whatever data it has collected.
 
 ---

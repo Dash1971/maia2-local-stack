@@ -71,9 +71,13 @@ Open the .dmg and drag En Croissant to Applications.
 
 ## 4. Build opening books
 
-Same command as Linux — the script auto-detects your OS:
+Clone and run the standalone builder; it auto-detects macOS:
 
 ```bash
+cd ~
+git clone https://github.com/Dash1971/chess-opening-book-builder.git
+cd chess-opening-book-builder
+chmod +x build-books.sh
 ./build-books.sh
 ```
 
@@ -106,7 +110,7 @@ brew install pypy3
 pypy3 -m pip install chess
 ```
 
-`build-books.sh` auto-detects PyPy and uses it if available.
+The standalone builder auto-detects PyPy and uses it if available.
 
 ### Non-interactive mode
 
@@ -217,7 +221,7 @@ EOF
 chmod +x ~/chess/maia2-engine/maia2-engine-blitz.sh
 ```
 
-Add as a separate engine in En Croissant. You can also build a blitz-specific opening book by re-running `./build-books.sh` and choosing option 2 (Blitz only) for the time control.
+Add as a separate engine in En Croissant. You can also build a blitz-specific opening book by re-running the standalone builder and choosing option 2 (Blitz only) for the time control.
 
 ---
 

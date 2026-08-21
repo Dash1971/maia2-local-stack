@@ -42,9 +42,13 @@ First run takes about 20 seconds while the neural network loads. You should see 
 
 ## 2. Build opening books
 
-Run the interactive book builder:
+Clone and run the standalone book builder:
 
 ```bash
+cd ~
+git clone https://github.com/Dash1971/chess-opening-book-builder.git
+cd chess-opening-book-builder
+chmod +x build-books.sh
 ./build-books.sh
 ```
 
@@ -86,7 +90,7 @@ sudo apt install pypy3
 pypy3 -m pip install chess --break-system-packages
 ```
 
-`build-books.sh` auto-detects PyPy and uses it if available.
+The standalone builder auto-detects PyPy and uses it if available.
 
 ### Non-interactive mode
 
@@ -245,7 +249,7 @@ The opening book isn't loading. Check:
 Make sure you're using **Maia 2 Analysis** (HumanTime off) in the analysis panel, not the play engine. The play engine has HumanTime on which causes delays that don't work well for analysis.
 
 ### Book builder fails with "HTTP 404"
-The monthly Lichess file for that month isn't available yet — new months are published a few days into the following month. Re-run `./build-books.sh` and pick a different month when prompted, or check [database.lichess.org](https://database.lichess.org) for the list of available months.
+The monthly Lichess file for that month isn't available yet — new months are published a few days into the following month. Re-run the standalone builder and pick a different month when prompted, or check [database.lichess.org](https://database.lichess.org) for the list of available months.
 
 ### `build-books.sh` runs out of memory
 Unlikely with 8+ GB RAM, but if it does, try with a smaller data size (option 1: 2 GB).

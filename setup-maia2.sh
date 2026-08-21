@@ -522,8 +522,8 @@ if [[ "$PLATFORM" == "macos" ]]; then
 fi
 echo ""
 echo -e "  ${BOLD}Next steps:${RESET}"
-echo -e "    • Build opening books from real Lichess games (interactive):"
-echo -e "      ${CYAN}./build-books.sh${RESET}"
+echo -e "    • Build optional opening books with the standalone builder:"
+echo -e "      ${CYAN}https://github.com/Dash1971/chess-opening-book-builder${RESET}"
 echo -e ""
 if [[ "$PLATFORM" == "linux" ]]; then
     echo -e "    See ${BOLD}GUIDE.md${RESET} for the full walkthrough."

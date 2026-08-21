@@ -17,7 +17,6 @@ Check the affected files first:
 
 - `README.md`
 - `setup-maia2.sh`
-- `build-books.sh`
 - `maia2_uci.py`
 - `GUIDE.md`
 - `GUIDE-macOS.md`
@@ -30,7 +29,6 @@ At minimum, run:
 
 ```bash
 bash -n setup-maia2.sh
-bash -n build-books.sh
 python3 -m py_compile maia2_uci.py
 ```
 
