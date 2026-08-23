@@ -1,5 +1,10 @@
 # maia2-local-stack
 
+> [!IMPORTANT]
+> **Deprecated:** This project has been superseded by
+> [maia3-local-stack](https://github.com/Dash1971/maia3-local-stack).
+> Use the Maia 3 repository for the current local-stack setup and documentation.
+
 Run [Maia 2](https://www.maiachess.com/) locally as a UCI chess engine, with opening books built from Lichess games filtered by rating and support for side-by-side analysis with Stockfish.
 
 Maia 2 is a neural network from the University of Toronto's CSSLab that predicts likely human moves at a given rating. This repository packages Maia 2 for local use with En Croissant or any UCI-compatible GUI, adds optional opening-book support, and provides Linux and Apple Silicon macOS setup paths.
