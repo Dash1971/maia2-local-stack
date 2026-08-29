@@ -216,6 +216,7 @@ cat > "$UCI_SCRIPT" << PYTHON_EOF
 #!/usr/bin/env python3
 """
 maia2_uci.py — UCI wrapper for Maia 2 with:
+  - Separate self and opponent Elo conditioning
   - Polyglot opening book support (BookFile option)
   - Human-like thinking time (HumanTime option)
   - Analysis mode support (proper go infinite / stop handling)
@@ -329,6 +330,8 @@ def uci_loop():
             print("id name Maia 2 (local)")
             print("id author Maia + Dash1971")
             print("option name ELO type spin default 1500 min 600 max 2600")
+            print("option name SelfElo type spin default 1500 min 600 max 2600")
+            print("option name OppoElo type spin default 1500 min 600 max 2600")
             print("option name BookFile type string default")
             print("option name HumanTime type check default false")
             print("uciok")
@@ -341,6 +344,16 @@ def uci_loop():
                 if name == "ELO":
                     try:
                         elo_self = int(value); elo_oppo = int(value)
+                    except ValueError:
+                        pass
+                elif name == "SelfElo":
+                    try:
+                        elo_self = int(value)
+                    except ValueError:
+                        pass
+                elif name == "OppoElo":
+                    try:
+                        elo_oppo = int(value)
                     except ValueError:
                         pass
                 elif name == "BookFile":

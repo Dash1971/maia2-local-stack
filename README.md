@@ -18,6 +18,7 @@ Maia 2 is a neural network from the University of Toronto's CSSLab that predicts
 ## Features
 
 - **Rating-targeted play** from 600 to 2600
+- **Separate self/opponent ratings** for matches between different Elo bands
 - **Opening books** weighted by how often real players at your level actually choose each move
 - **HumanTime** — optional thinking delays (0.5–15 seconds, scaled by position complexity)
 - **Multi-engine analysis** — run Maia and Stockfish side by side
@@ -133,6 +134,27 @@ Plus Stockfish for objective evaluation. In the Analysis panel, add both Stockfi
 - **Maia** says what a human at your target rating would actually play
 
 Use this to compare likely human choices against engine-best moves.
+
+## UCI rating options
+
+The wrapper exposes three rating controls:
+
+| Option | Purpose |
+|---|---|
+| `ELO` | Convenience setting that assigns the same value to both `SelfElo` and `OppoElo` |
+| `SelfElo` | Rating of the player whose move Maia 2 is predicting |
+| `OppoElo` | Rating of that player's opponent |
+
+For ordinary same-rating play, setting only `ELO` is sufficient. For a match
+between different rating bands, set both specific options on each engine. For
+example, in an 1100-versus-1900 match:
+
+- the 1100 profile uses `SelfElo=1100` and `OppoElo=1900`;
+- the 1900 profile uses `SelfElo=1900` and `OppoElo=1100`.
+
+If `ELO`, `SelfElo`, and `OppoElo` are all sent, the most recently sent value
+for each specific field takes effect. Applications should therefore send the
+general `ELO` option first, followed by `SelfElo` and `OppoElo`.
 
 ## Limitations
 
